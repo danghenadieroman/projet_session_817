@@ -1,0 +1,4 @@
+Eva 150
+Vasea 10
+Dan 350
+Igor 0
