@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import jdk.nashorn.internal.ir.ContinueNode;
 import model.ListeUtilisateurs;
 import model.Utilisateur;
 
@@ -23,11 +22,13 @@ import model.Utilisateur;
  *
  * @author Irina Meghi-Roman
  */
-public class Fen_Principale extends JFrame {
+public class Fen_Principale extends JFrame implements ActionListener {
 
     private int MIN = 1;
     private int MAX = 10;
     private int nombreFauts = 0;
+    private int nombreOpp = 0;
+    private int compteurOpp = 0;
 
     //attributs
     private JPanel jpPanel;
@@ -42,16 +43,19 @@ public class Fen_Principale extends JFrame {
     private JButton btnEgal = new JButton();
     private JButton btnResultat = new JButton();
 
-    private JButton btnOk = new JButton();
-    private JButton btnAnnuler = new JButton();
+    private JButton btnZero = new JButton("0");
+    private JButton btnOk = new JButton("OK");
+    private JButton btnAnnuler = new JButton("Annuler");
 
     private JLabel lblUtilisateur = new JLabel("Utilisateur: ", JLabel.CENTER);
     private JLabel lblNiveau = new JLabel("Niveau accumulé: ", JLabel.CENTER);
     private JLabel lblTemps = new JLabel("Temps: 00:00", JLabel.CENTER);
     private JLabel lblFautes = new JLabel("Fauts: 0", JLabel.CENTER);
-    private JLabel lblInfo = new JLabel("Info", JLabel.CENTER);
+    private JLabel lblNombreOpp = new JLabel("Opperation: 0", JLabel.CENTER);
+    private JLabel lblPrecedent = new JLabel("Fenetre precedent", JLabel.CENTER);
+    private JLabel lblInfo = new JLabel("", JLabel.CENTER);
 
-    public Fen_Principale(final String fichier, final ListeUtilisateurs liste, final Utilisateur utilisateurCourant) {
+    public Fen_Principale(String fichier, ListeUtilisateurs liste, Utilisateur utilisateurCourant) {
 
         //les paneaux
         //panel principal
@@ -61,13 +65,16 @@ public class Fen_Principale extends JFrame {
         jpNord = new JPanel(new GridLayout(2, 1));
         jpPanel.add(jpNord);
 
-        //jpInfo
-        jpInfo = new JPanel(new GridLayout(1, 5));
+        //jpInfo: paneau Info Utilisateur
+        jpInfo = new JPanel(new GridLayout(2, 5));
         jpNord.add(jpInfo);
         jpInfo.add(lblUtilisateur);
         jpInfo.add(lblNiveau);
+        jpInfo.add(lblNombreOpp);
         jpInfo.add(lblTemps);
         jpInfo.add(lblFautes);
+
+        jpInfo.add(lblPrecedent);
         jpInfo.add(lblInfo);
 
         lblUtilisateur.setText("Utilisateur: " + utilisateurCourant.getNom());
@@ -100,22 +107,24 @@ public class Fen_Principale extends JFrame {
         jpSud = new JPanel(new GridLayout(4, 3, 1, 1));
         jpPanel.add(jpSud);
 
+        //générer une liste des entiers
         JButton[] nombres = new JButton[10];
 
-        //générer une liste des entiers
-        for (int i = 0; i < nombres.length; i++) {
+        for (int i = 1; i < nombres.length; i++) {
             nombres[i] = new JButton("" + i);
-            nombres[i].addActionListener(new ButtonClickListener());
+            nombres[i].addActionListener(this);
             nombres[i].setFont(new Font(null, Font.BOLD, 20));
             jpSud.add(nombres[i]);
         }
+        jpSud.add(btnZero);
+        btnZero.setFont(new Font(null, Font.BOLD, 20));
+        btnZero.addActionListener(this);
+
         jpSud.add(btnOk);
-        btnOk.setText("OK");
-        btnOk.addActionListener(new ButtonClickListener());
+        btnOk.addActionListener(this);
 
         jpSud.add(btnAnnuler);
-        btnAnnuler.setText("Annuler");
-        btnAnnuler.addActionListener(new ButtonClickListener());
+        btnAnnuler.addActionListener(this);
 
         //set fenetre
         setTitle("Kumon: Page principale");
@@ -125,88 +134,36 @@ public class Fen_Principale extends JFrame {
         setLocationRelativeTo(null);
         setResizable(true);
         setVisible(true);
-//        addWindowListener(new WindowAdapter() {
-//            public void windowClosing(WindowEvent windowEvent) {
-//                System.exit(0);
-//            }
-//        });
-
     }//constructeur
 
-    private class ButtonClickListener implements ActionListener {
+    //override methodes
+    //ecouteurs pour les objets de la fenetre
+    @Override
+    public void actionPerformed(ActionEvent ae) {
 
-        public void actionPerformed(ActionEvent e) {
+        String commande = ae.getActionCommand();
+        determinerActionListener(commande);
+    }
 
-            String command = e.getActionCommand();
-            switch (command) {
-                case "0": {
-                    btnResultat.setText(btnResultat.getText() + "0");
-                    break;
-                }
-                case "1": {
-                    btnResultat.setText(btnResultat.getText() + "1");
-                    break;
-                }
-                case "2": {
-                    btnResultat.setText(btnResultat.getText() + "2");
-                    break;
-                }
-                case "3": {
-                    btnResultat.setText(btnResultat.getText() + "3");
-                    break;
-                }
-                case "4": {
-                    btnResultat.setText(btnResultat.getText() + "4");
-                    break;
-                }
-                case "5": {
-                    btnResultat.setText(btnResultat.getText() + "5");
-                    break;
-                }
-                case "6": {
-                    btnResultat.setText(btnResultat.getText() + "6");
-                    break;
-                }
-                case "7": {
-                    btnResultat.setText(btnResultat.getText() + "7");
-                    break;
-                }
-                case "8": {
-                    btnResultat.setText(btnResultat.getText() + "8");
-                    break;
-                }
-                case "9": {
-                    btnResultat.setText(btnResultat.getText() + "9");
-                    break;
-                }
-                case "OK": {
+    //object methodes
+    public void verifierResultat() {//comment ici je peut recevoir l'objet de type Utilisateur?
 
-                    verifierResultat();
+        if (!btnResultat.getText().isEmpty()) {
+            if (verifierResultat(btnResultat, btnA, btnB, btnSign)) {
 
-                    break;
-                }
-                case "Annuler": {
-                    btnResultat.setText("");
-                    break;
-                }
+                lblInfo.setText("BRAVO");
+                btnResultat.setText("");
+                nombreOpp++;
+                lblNombreOpp.setText("Opperation: " + nombreOpp);
+                genererOpperation();
+
+            } else {
+                lblInfo.setText("INCORRECT");
+                btnResultat.setText("");
+                nombreFauts++;
+                lblFautes.setText("Fauts: " + nombreFauts);
+                lblFautes.setForeground(Color.red);
             }
-        }
-    }//private class ButtonClickListener
-
-    //methodes
-    public void verifierResultat() {
-
-        if (btnResultat.getText().isEmpty()) {
-
-        } else if (verifierResultat(btnResultat, btnA, btnB, btnSign)) {
-            lblInfo.setText("BRAVO");
-            genererOpperation();
-        } else {
-            lblInfo.setText("INCORRECT");
-            btnResultat.setText("");
-            nombreFauts++;
-            lblFautes.setText("Fauts: " + nombreFauts);
-            lblFautes.setForeground(Color.red);
         }
     }
 
@@ -218,6 +175,63 @@ public class Fen_Principale extends JFrame {
         btnEgal.setText("=");
         btnResultat.setText("");
 
+    }
+
+    //verifier écouteur
+    public void determinerActionListener(String commande) {
+
+        switch (commande) {
+            case "0": {
+                btnResultat.setText(btnResultat.getText() + "0");
+                break;
+            }
+            case "1": {
+                btnResultat.setText(btnResultat.getText() + "1");
+                break;
+            }
+            case "2": {
+                btnResultat.setText(btnResultat.getText() + "2");
+                break;
+            }
+            case "3": {
+                btnResultat.setText(btnResultat.getText() + "3");
+                break;
+            }
+            case "4": {
+                btnResultat.setText(btnResultat.getText() + "4");
+                break;
+            }
+            case "5": {
+                btnResultat.setText(btnResultat.getText() + "5");
+                break;
+            }
+            case "6": {
+                btnResultat.setText(btnResultat.getText() + "6");
+                break;
+            }
+            case "7": {
+                btnResultat.setText(btnResultat.getText() + "7");
+                break;
+            }
+            case "8": {
+                btnResultat.setText(btnResultat.getText() + "8");
+                break;
+            }
+            case "9": {
+                btnResultat.setText(btnResultat.getText() + "9");
+                break;
+            }
+            case "OK": {
+
+                verifierResultat();
+
+                break;
+            }
+            case "Annuler": {
+                btnResultat.setText("");
+                break;
+            }
+        }//switch
     }
 
     //verifier si resultat d'opperation est correct
