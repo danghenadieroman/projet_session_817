@@ -23,13 +23,13 @@ public class AppCtr {
         String fichier = "data.txt";
         ManipulationFichier.lireFichierDansLaListe(fichier, listeUtilisateurs);
 
-       Fen_Principale f = new Fen_Principale(fichier, listeUtilisateurs, new Utilisateur("Dan", 0));
-       
-       
-//        Fen_Liste fen_liste = new Fen_Liste(fichier, listeUtilisateurs);
-//        Fen_Intro fen_intro = new Fen_Intro(fichier, listeUtilisateurs, fen_liste);
-//        fen_liste.setVisible(false);
+//        Fen_Principale fen_principale = new Fen_Principale(fichier, listeUtilisateurs, new Utilisateur("Dan", 0));
 
+        Fen_Liste fen_liste = new Fen_Liste(fichier, listeUtilisateurs);
+        fen_liste.setVisible(false);
+        Fen_Intro fen_intro = new Fen_Intro(fichier, listeUtilisateurs, fen_liste);
+        
+        
 
     }
 

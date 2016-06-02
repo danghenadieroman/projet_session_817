@@ -34,7 +34,7 @@ public class Fen_Ajouter extends JFrame {
     private JPanel jpSud;
 
     //constructeur
-    public Fen_Ajouter(final Fen_Liste fenetreListe, final String fichier, final ListeUtilisateurs listeUtilisateurs) {
+    public Fen_Ajouter(final String fichier, final ListeUtilisateurs listeUtilisateurs) {
 
         lblTitre = new JLabel("Ajouter nouvel utilisateur:");
         lblNom = new JLabel("Nom: ");
@@ -73,17 +73,12 @@ public class Fen_Ajouter extends JFrame {
                     try {
                         listeUtilisateurs.ajouterUtilisateur(nouvelUtilisateur);
 //                        JOptionPane.showMessageDialog(null, "Utilisateur: \n" + txtNom.getText() + " " + "\na été ajouté");
-                        fenetreListe.revalidate();//pourquoi la fenetre ne se refresh pas???
-                        fenetreListe.repaint();
-                        
+
                         //si nouvel utilisateur a été bien ajouter, alors continue
-                        
-                        fenetreListe.setVisible(false);
                         setVisible(false);
-                        
+
                         //instantion fenetre principal avec nouvel utilisateur créé
                         Fen_Principale fenPrincipal = new Fen_Principale(fichier, listeUtilisateurs, nouvelUtilisateur);
-                        
 
                     } catch (UtilisateurDejaPresentException utilisateur) {
                         JOptionPane.showMessageDialog(null, nouvelUtilisateur + " existe déja!", "Doublon!",
@@ -93,8 +88,6 @@ public class Fen_Ajouter extends JFrame {
                     //sauvgare modification imediat dans le fichier
                     try {
                         ManipulationFichier.ecrireListeDansLeFichier(fichier, listeUtilisateurs);
-
-                        
 
                     } catch (Exception ex) {
                         System.out.println("Ecriture fichier invalide");

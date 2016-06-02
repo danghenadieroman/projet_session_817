@@ -24,19 +24,21 @@ import model.Utilisateur;
  */
 public class Fen_Principale extends JFrame implements ActionListener {
 
+    //attributs
     private int MIN = 1;
     private int MAX = 10;
     private int nombreFauts = 0;
     private int nombreOpp = 0;
     private int compteurOpp = 0;
 
-    //attributs
+    //panels
     private JPanel jpPanel;
     private JPanel jpNord;
     private JPanel jpInfo;
     private JPanel jpSud;
     private JPanel jpOpperations;
 
+    //boutons
     private JButton btnA = new JButton();
     private JButton btnSign = new JButton();
     private JButton btnB = new JButton();
@@ -46,16 +48,18 @@ public class Fen_Principale extends JFrame implements ActionListener {
     private JButton btnZero = new JButton("0");
     private JButton btnOk = new JButton("OK");
     private JButton btnAnnuler = new JButton("Annuler");
+    
+    private JButton btnRetour = new JButton("Retour");
 
+    //labels
     private JLabel lblUtilisateur = new JLabel("Utilisateur: ", JLabel.CENTER);
     private JLabel lblNiveau = new JLabel("Niveau accumulé: ", JLabel.CENTER);
     private JLabel lblTemps = new JLabel("Temps: 00:00", JLabel.CENTER);
     private JLabel lblFautes = new JLabel("Fauts: 0", JLabel.CENTER);
     private JLabel lblNombreOpp = new JLabel("Opperation: 0", JLabel.CENTER);
-    private JLabel lblPrecedent = new JLabel("Fenetre precedent", JLabel.CENTER);
     private JLabel lblInfo = new JLabel("", JLabel.CENTER);
 
-    public Fen_Principale(String fichier, ListeUtilisateurs liste, Utilisateur utilisateurCourant) {
+    public Fen_Principale(final String fichier, final ListeUtilisateurs liste, final Utilisateur utilisateur) {
 
         //les paneaux
         //panel principal
@@ -71,14 +75,18 @@ public class Fen_Principale extends JFrame implements ActionListener {
         jpInfo.add(lblUtilisateur);
         jpInfo.add(lblNiveau);
         jpInfo.add(lblNombreOpp);
+        jpInfo.add(btnRetour);
         jpInfo.add(lblTemps);
         jpInfo.add(lblFautes);
+        
+        btnRetour.addActionListener(this);
+        
 
-        jpInfo.add(lblPrecedent);
+        
         jpInfo.add(lblInfo);
 
-        lblUtilisateur.setText("Utilisateur: " + utilisateurCourant.getNom());
-        lblNiveau.setText("Niveau: " + utilisateurCourant.getNiveau());
+        lblUtilisateur.setText("Utilisateur: " + utilisateur.getNom());
+        lblNiveau.setText("Niveau: " + utilisateur.getNiveau());
 
         //jpOpperations
         jpOpperations = new JPanel(new GridLayout(1, 5, 2, 2));
@@ -130,7 +138,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
         setTitle("Kumon: Page principale");
         setContentPane(jpPanel);
         setSize(500, 350);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
         setVisible(true);
@@ -141,46 +149,8 @@ public class Fen_Principale extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
 
-        String commande = ae.getActionCommand();
-        determinerActionListener(commande);
-    }
-
-    //object methodes
-    public void verifierResultat() {//comment ici je peut recevoir l'objet de type Utilisateur?
-
-        if (!btnResultat.getText().isEmpty()) {
-            if (verifierResultat(btnResultat, btnA, btnB, btnSign)) {
-
-                lblInfo.setText("BRAVO");
-                btnResultat.setText("");
-                nombreOpp++;
-                lblNombreOpp.setText("Opperation: " + nombreOpp);
-                genererOpperation();
-
-            } else {
-                lblInfo.setText("INCORRECT");
-                btnResultat.setText("");
-                nombreFauts++;
-                lblFautes.setText("Fauts: " + nombreFauts);
-                lblFautes.setForeground(Color.red);
-            }
-        }
-    }
-
-    public void genererOpperation() {
-        //generer les opperations
-        btnA.setText("" + genererNombre(MIN, MAX));
-        btnSign.setText("+");
-        btnB.setText("" + genererNombre(MIN, MAX));
-        btnEgal.setText("=");
-        btnResultat.setText("");
-
-    }
-
-    //verifier écouteur
-    public void determinerActionListener(String commande) {
-
-        switch (commande) {
+        switch (ae.getActionCommand()) {
+            
             case "0": {
                 btnResultat.setText(btnResultat.getText() + "0");
                 break;
@@ -231,7 +201,46 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 btnResultat.setText("");
                 break;
             }
+            case "Retour": {
+                setVisible(false);
+                //comment ici je peut ouvrir/creer une nouvel fenetre Fen_Liste???
+                //c'est le cas quand utilisateur veux revenir a la fenetre precedent (fenetre avec  liste utilisateurs)
+                break;
+            }
         }//switch
+    }
+
+    //object methodes
+    public void verifierResultat() {//comment ici je peut recevoir l'objet de type Utilisateur?
+
+        if (!btnResultat.getText().isEmpty()) {
+
+            if (verifierResultat(btnResultat, btnA, btnB, btnSign)) {
+
+                lblInfo.setText("BRAVO");
+                btnResultat.setText("");
+                nombreOpp++;
+                lblNombreOpp.setText("Opperation: " + nombreOpp);
+                genererOpperation();
+
+            } else {
+                lblInfo.setText("INCORRECT");
+                btnResultat.setText("");
+                nombreFauts++;
+                lblFautes.setText("Fauts: " + nombreFauts);
+                lblFautes.setForeground(Color.red);
+            }
+        }
+    }
+
+    public void genererOpperation() {
+        //generer les opperations
+        btnA.setText("" + genererNombre(MIN, MAX));
+        btnSign.setText("+");
+        btnB.setText("" + genererNombre(MIN, MAX));
+        btnEgal.setText("=");
+        btnResultat.setText("");
+
     }
 
     //verifier si resultat d'opperation est correct

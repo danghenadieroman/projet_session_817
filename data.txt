@@ -1,4 +1,6 @@
 Eva 150
-Vasea 10
 Dan 350
-Igor 0
+Jora 0
+Petea 0
+Aliona 0
+Patanu 0
