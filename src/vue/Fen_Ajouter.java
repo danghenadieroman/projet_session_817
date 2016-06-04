@@ -21,6 +21,10 @@ import utils.ManipulationFichier;
 public class Fen_Ajouter extends JFrame {
 
     //attributs
+    Utilisateur utilisateur;
+    ListeUtilisateurs liste;
+    String fichier;
+
     private JLabel lblTitre;
     private JLabel lblNom;
     private JTextField txtNom;
@@ -34,7 +38,10 @@ public class Fen_Ajouter extends JFrame {
     private JPanel jpSud;
 
     //constructeur
-    public Fen_Ajouter(final String fichier, final ListeUtilisateurs listeUtilisateurs) {
+    public Fen_Ajouter(final String fichier, final ListeUtilisateurs liste) {
+
+        this.fichier = fichier;
+        this.liste = liste;
 
         lblTitre = new JLabel("Ajouter nouvel utilisateur:");
         lblNom = new JLabel("Nom: ");
@@ -71,14 +78,14 @@ public class Fen_Ajouter extends JFrame {
 
                     //ajout nouvel utilisateur dans la liste utilisateurs
                     try {
-                        listeUtilisateurs.ajouterUtilisateur(nouvelUtilisateur);
+                        liste.ajouterUtilisateur(nouvelUtilisateur);
 //                        JOptionPane.showMessageDialog(null, "Utilisateur: \n" + txtNom.getText() + " " + "\na été ajouté");
 
                         //si nouvel utilisateur a été bien ajouter, alors continue
                         setVisible(false);
 
                         //instantion fenetre principal avec nouvel utilisateur créé
-                        Fen_Principale fenPrincipal = new Fen_Principale(fichier, listeUtilisateurs, nouvelUtilisateur);
+                        Fen_Principale fenPrincipal = new Fen_Principale(fichier, liste, nouvelUtilisateur);
 
                     } catch (UtilisateurDejaPresentException utilisateur) {
                         JOptionPane.showMessageDialog(null, nouvelUtilisateur + " existe déja!", "Doublon!",
@@ -87,7 +94,7 @@ public class Fen_Ajouter extends JFrame {
 
                     //sauvgare modification imediat dans le fichier
                     try {
-                        ManipulationFichier.ecrireListeDansLeFichier(fichier, listeUtilisateurs);
+                        ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
 
                     } catch (Exception ex) {
                         System.out.println("Ecriture fichier invalide");

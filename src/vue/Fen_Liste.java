@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultListModel;
@@ -23,11 +24,17 @@ import utils.ManipulationFichier;
 public class Fen_Liste extends JFrame {
 
     //attributs
+    private String fichier;
+    private ListeUtilisateurs liste;
+
+    private JLabel lblTitre;
+
     private JPanel jpPanel;
     private JPanel jpNord;
     private JPanel jpCentre;
     private JPanel jpSud;
     private JPanel jpListe;
+    private JPanel jpListeBoutons;
 
     private JButton btnRefresh;
     //
@@ -41,7 +48,13 @@ public class Fen_Liste extends JFrame {
     //constructeur
     public Fen_Liste(final String fichier, final ListeUtilisateurs liste) {
 
-        //labes
+//        this.fichier = fichier;
+//        this.liste = liste;
+        //pourquoi ici marche directeument, sans le passer par attributs local????
+
+        //lire le fichier (persistence) dans la liste (memoire)
+        ManipulationFichier.lireFichierDansLaListe(fichier, liste);
+
         //les paneaux
         jpPanel = new JPanel();
         jpPanel.setLayout(new BorderLayout());
@@ -49,7 +62,9 @@ public class Fen_Liste extends JFrame {
 
         jpNord = new JPanel();
         jpPanel.add(jpNord, BorderLayout.NORTH);
-        jpNord.setBackground(Color.yellow);
+
+        lblTitre = new JLabel("Liste des utilisateurs");
+        jpNord.add(lblTitre);
 
         //panel Liste Utilisateurs
         jpListe = new JPanel(new BorderLayout());
@@ -62,16 +77,21 @@ public class Fen_Liste extends JFrame {
         btnAjouter = new JButton("Ajouter");
         btnCommancer = new JButton("Commancer");
         btnSupprimer = new JButton("Supprimer");
+        btnRefresh = new JButton("Refresh");
 
+        jpListeBoutons = new JPanel(new GridBagLayout());
+        jpListe.add(jpListeBoutons);
         jpListe.add(pane, BorderLayout.NORTH);
-        jpListe.add(btnCommancer, BorderLayout.CENTER);
-        jpListe.add(btnAjouter, BorderLayout.WEST);
-        jpListe.add(btnSupprimer, BorderLayout.EAST);
+        jpListeBoutons.add(btnCommancer);
+        jpListeBoutons.add(btnAjouter);
+        jpListeBoutons.add(btnSupprimer);
+        jpListeBoutons.add(btnRefresh);
 
         //parcourir la liste utilisateurs pour afficher 
-        for (Utilisateur utilisateur : liste) {
-            model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
-        }
+        ajouterListeAModel(liste);
+//        for (Utilisateur utilisateur : liste) {
+//            model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
+//        }
 
         //bouton ajouter
         btnAjouter.addActionListener(new ActionListener() {
@@ -93,7 +113,7 @@ public class Fen_Liste extends JFrame {
                     Fen_Principale fenPrincipal = new Fen_Principale(fichier, liste, utilisateur);
                 } else {
                     JOptionPane.showMessageDialog(null, " Selectioner l<utilisateur SVP", "Erreur!",
-                                JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -111,6 +131,15 @@ public class Fen_Liste extends JFrame {
                 }
             }
         });
+
+        btnRefresh.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                model.clear();
+                ajouterListeAModel(liste);
+            }
+        });
         //fin jpList
 
         jpCentre = new JPanel();
@@ -120,11 +149,24 @@ public class Fen_Liste extends JFrame {
         //set fenetre
         setTitle("Kumon: Liste utilisateurs");
         setContentPane(jpPanel);
-        setSize(700, 350);
+        setSize(500, 350);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
         setVisible(true);
+    }
+
+    //objet methodes 
+    public void ajouterListeAModel(ListeUtilisateurs liste) {
+
+        for (Utilisateur utilisateur : liste) {
+            model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
+        }
+    }
+
+    public void ajouterUtilisateurAModel(Utilisateur utilisateur) {
+
+        model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
     }
 
 }

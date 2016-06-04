@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import model.ListeUtilisateurs;
+import model.Utilisateur;
 
 /**
  *
@@ -18,6 +19,10 @@ import model.ListeUtilisateurs;
 public class Fen_Intro extends JFrame {
 
     //attributs
+    private Utilisateur utilisateur;
+    private ListeUtilisateurs liste;
+    private String fichier;
+
     private JLabel lblImageLogo;
     private JLabel lblTexteTitre;
     private JLabel lblImagePlay;
@@ -30,8 +35,15 @@ public class Fen_Intro extends JFrame {
     private JButton btnStart;
 
     //constructeur
-    public Fen_Intro(String fichier, ListeUtilisateurs liste, final Fen_Liste fen_liste) {
+    public Fen_Intro(String fichierRecu, ListeUtilisateurs listeRecu) {
+
+        this.fichier = fichierRecu;
+        this.liste = listeRecu;
         
+       
+
+        
+
         lblImageLogo = new JLabel();
         lblImageLogo.setIcon(new ImageIcon(getClass().getResource("/images/logo.jpg")));
 
@@ -58,15 +70,16 @@ public class Fen_Intro extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
+                Fen_Liste fen_liste = new Fen_Liste(fichier, liste);
                 fen_liste.setVisible(true);
                 setVisible(false);
             }
         });
 
         //set fenetre
-        setTitle("Kumon centre");
+        setTitle("Kumon: Bienvenue");
         setContentPane(jpPanel);
-        setSize(700, 350);
+        setSize(500, 350);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);

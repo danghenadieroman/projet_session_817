@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.ListeUtilisateurs;
 import model.Utilisateur;
+import utils.ManipulationFichier;
 
 /**
  *
@@ -25,6 +26,10 @@ import model.Utilisateur;
 public class Fen_Principale extends JFrame implements ActionListener {
 
     //attributs
+    private Utilisateur utilisateur;
+    private ListeUtilisateurs liste;
+    private String fichier;
+
     private int MIN = 1;
     private int MAX = 10;
     private int nombreFauts = 0;
@@ -48,7 +53,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
     private JButton btnZero = new JButton("0");
     private JButton btnOk = new JButton("OK");
     private JButton btnAnnuler = new JButton("Annuler");
-    
+
     private JButton btnRetour = new JButton("Retour");
 
     //labels
@@ -59,7 +64,11 @@ public class Fen_Principale extends JFrame implements ActionListener {
     private JLabel lblNombreOpp = new JLabel("Opperation: 0", JLabel.CENTER);
     private JLabel lblInfo = new JLabel("", JLabel.CENTER);
 
-    public Fen_Principale(final String fichier, final ListeUtilisateurs liste, final Utilisateur utilisateur) {
+    public Fen_Principale(String fichier, ListeUtilisateurs liste, Utilisateur utilisateur) {
+
+        this.fichier = fichier;
+        this.liste = liste;
+        this.utilisateur = utilisateur;
 
         //les paneaux
         //panel principal
@@ -78,11 +87,9 @@ public class Fen_Principale extends JFrame implements ActionListener {
         jpInfo.add(btnRetour);
         jpInfo.add(lblTemps);
         jpInfo.add(lblFautes);
-        
-        btnRetour.addActionListener(this);
-        
 
-        
+        btnRetour.addActionListener(this);
+
         jpInfo.add(lblInfo);
 
         lblUtilisateur.setText("Utilisateur: " + utilisateur.getNom());
@@ -150,7 +157,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
 
         switch (ae.getActionCommand()) {
-            
+
             case "0": {
                 btnResultat.setText(btnResultat.getText() + "0");
                 break;
@@ -203,15 +210,14 @@ public class Fen_Principale extends JFrame implements ActionListener {
             }
             case "Retour": {
                 setVisible(false);
-                //comment ici je peut ouvrir/creer une nouvel fenetre Fen_Liste???
-                //c'est le cas quand utilisateur veux revenir a la fenetre precedent (fenetre avec  liste utilisateurs)
+
                 break;
             }
         }//switch
     }
 
     //object methodes
-    public void verifierResultat() {//comment ici je peut recevoir l'objet de type Utilisateur?
+    public void verifierResultat() {
 
         if (!btnResultat.getText().isEmpty()) {
 
@@ -222,6 +228,22 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 nombreOpp++;
                 lblNombreOpp.setText("Opperation: " + nombreOpp);
                 genererOpperation();
+                
+                if (nombreOpp == 3 && nombreFauts == 0) {
+                    augmanterNiveauUtilisateur(utilisateur);
+                    JOptionPane.showMessageDialog(null, "Félicitation. Niveau augmanté!", "Félicitation!",
+                            JOptionPane.PLAIN_MESSAGE);
+                    ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
+                    updateFenetrePrincipale();
+                    
+                } else {
+                    if(nombreOpp == 3 && nombreFauts > 0){
+                        JOptionPane.showMessageDialog(null, "On recomance l'exercices!", "Échec!",
+                            JOptionPane.PLAIN_MESSAGE);
+                        updateFenetrePrincipale();
+                        genererOpperation();
+                    }
+                }
 
             } else {
                 lblInfo.setText("INCORRECT");
@@ -229,10 +251,19 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 nombreFauts++;
                 lblFautes.setText("Fauts: " + nombreFauts);
                 lblFautes.setForeground(Color.red);
+
             }
         }
     }
 
+    public void updateFenetrePrincipale(){
+        lblNiveau.setText("Niveau: " + utilisateur.getNiveau());
+        nombreOpp = 0;
+        lblNombreOpp.setText("Opperation: " + nombreOpp);
+        nombreFauts = 0;
+        lblFautes.setText("Fautes: " + nombreFauts);
+    }
+    
     public void genererOpperation() {
         //generer les opperations
         btnA.setText("" + genererNombre(MIN, MAX));
@@ -241,6 +272,12 @@ public class Fen_Principale extends JFrame implements ActionListener {
         btnEgal.setText("=");
         btnResultat.setText("");
 
+    }
+
+    //modifier niveau utilisateur
+    public void augmanterNiveauUtilisateur(Utilisateur utilisateur) {
+
+        utilisateur.setNiveau(utilisateur.getNiveau() + 1);
     }
 
     //verifier si resultat d'opperation est correct
