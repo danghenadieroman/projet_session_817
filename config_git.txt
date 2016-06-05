@@ -1,0 +1,3 @@
+[user]
+    name = Dan-Ghenadie Roman
+    email = danghenadieroman@gmail.com
