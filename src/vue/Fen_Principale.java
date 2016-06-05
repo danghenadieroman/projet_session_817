@@ -1,15 +1,10 @@
 package vue;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -210,7 +205,6 @@ public class Fen_Principale extends JFrame implements ActionListener {
             }
             case "Retour": {
                 setVisible(false);
-
                 break;
             }
         }//switch
@@ -227,21 +221,21 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 btnResultat.setText("");
                 nombreOpp++;
                 lblNombreOpp.setText("Opperation: " + nombreOpp);
-                genererOpperation();
-                
+                genererOpperation(utilisateur);
+
                 if (nombreOpp == 3 && nombreFauts == 0) {
                     augmanterNiveauUtilisateur(utilisateur);
-                    JOptionPane.showMessageDialog(null, "Félicitation. Niveau augmanté!", "Félicitation!",
+                    JOptionPane.showMessageDialog(null, "Bravo! On continue les exercices!", "Augmentation de niveau!",
                             JOptionPane.PLAIN_MESSAGE);
                     ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
-                    updateFenetrePrincipale();
-                    
+                    metAJourFenetrePrincipale();
+
                 } else {
-                    if(nombreOpp == 3 && nombreFauts > 0){
-                        JOptionPane.showMessageDialog(null, "On recomance l'exercices!", "Échec!",
-                            JOptionPane.PLAIN_MESSAGE);
-                        updateFenetrePrincipale();
-                        genererOpperation();
+                    if (nombreOpp == 3 && nombreFauts > 0) {
+                        JOptionPane.showMessageDialog(null, "Désolée. On recommance les exercices!", "Pas augmentation de niveau!",
+                                JOptionPane.PLAIN_MESSAGE);
+                        metAJourFenetrePrincipale();
+//                        genererOpperation(utilisateur);
                     }
                 }
 
@@ -256,19 +250,32 @@ public class Fen_Principale extends JFrame implements ActionListener {
         }
     }
 
-    public void updateFenetrePrincipale(){
+    public int determinerComplexiteOpperation(Utilisateur utilisateur) {
+
+        return utilisateur.getNiveau();
+        //ici il faut elaborer une algorithme de determination niveau opperation depandement de niveau utilisateur
+
+    }
+
+    public void metAJourFenetrePrincipale() {
         lblNiveau.setText("Niveau: " + utilisateur.getNiveau());
         nombreOpp = 0;
         lblNombreOpp.setText("Opperation: " + nombreOpp);
         nombreFauts = 0;
         lblFautes.setText("Fautes: " + nombreFauts);
     }
-    
-    public void genererOpperation() {
+
+    public void genererOpperation(Utilisateur utilisateur) {
         //generer les opperations
-        btnA.setText("" + genererNombre(MIN, MAX));
+        int max = determinerComplexiteOpperation(utilisateur);
+        int min = 0;
+        if (max > 20) {
+            min = max - 20;
+        }
+
+        btnA.setText("" + genererNombre(0, 9));
         btnSign.setText("+");
-        btnB.setText("" + genererNombre(MIN, MAX));
+        btnB.setText("" + genererNombre(min, max));
         btnEgal.setText("=");
         btnResultat.setText("");
 

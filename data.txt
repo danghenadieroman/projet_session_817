@@ -1,5 +1,5 @@
-Eva 150
-Dan 350
-Jora 0
-Bill 4
-asd 0
+Eva 152
+Dan 352
+Jora 4
+Bill 17
+Vasea 50

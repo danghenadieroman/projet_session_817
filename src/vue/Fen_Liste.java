@@ -51,9 +51,12 @@ public class Fen_Liste extends JFrame {
 //        this.fichier = fichier;
 //        this.liste = liste;
         //pourquoi ici marche directeument, sans le passer par attributs local????
-
         //lire le fichier (persistence) dans la liste (memoire)
         ManipulationFichier.lireFichierDansLaListe(fichier, liste);
+        //s'il y a une erreur format fichier, alors
+        //on ecrie la liste dans le fichier pour ce debaracer de cette ligne invalide
+        //parce que la ligne invalide n'est pas copie dans la liste utilisateurs
+        ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
 
         //les paneaux
         jpPanel = new JPanel();
@@ -89,9 +92,6 @@ public class Fen_Liste extends JFrame {
 
         //parcourir la liste utilisateurs pour afficher 
         ajouterListeAModel(liste);
-//        for (Utilisateur utilisateur : liste) {
-//            model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
-//        }
 
         //bouton ajouter
         btnAjouter.addActionListener(new ActionListener() {
@@ -112,10 +112,9 @@ public class Fen_Liste extends JFrame {
                     Utilisateur utilisateur = liste.get(index);
                     Fen_Principale fenPrincipal = new Fen_Principale(fichier, liste, utilisateur);
                 } else {
-                    JOptionPane.showMessageDialog(null, " Selectioner l<utilisateur SVP", "Erreur!",
+                    JOptionPane.showMessageDialog(null, " Selectionner l'utilisateur SVP", "Erreur!",
                             JOptionPane.ERROR_MESSAGE);
                 }
-
             }
         });
 
@@ -124,11 +123,12 @@ public class Fen_Liste extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 int index = list.getSelectedIndex();
-                if (index >= 0) { //Remove only if a particular item is selected
+                if (index >= 0) {
                     model.removeElementAt(index);
                     liste.remove(index);
                     ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
                 }
+
             }
         });
 
@@ -138,6 +138,8 @@ public class Fen_Liste extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 model.clear();
                 ajouterListeAModel(liste);
+                ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
+
             }
         });
         //fin jpList
