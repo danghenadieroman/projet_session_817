@@ -26,6 +26,8 @@ public class Fen_Liste extends JFrame {
     //attributs
     private String fichier;
     private ListeUtilisateurs liste;
+    private JList list;
+    private DefaultListModel model;
 
     private JLabel lblTitre;
 
@@ -36,16 +38,13 @@ public class Fen_Liste extends JFrame {
     private JPanel jpListe;
     private JPanel jpListeBoutons;
 
-    private JButton btnRefresh;
-    //
-    private JList list;
-    private DefaultListModel model;
-
     private JButton btnCommancer;
     private JButton btnAjouter;
     private JButton btnSupprimer;
+    private JButton btnRefresh;
 
     //constructeur
+    //pourquoi il me demande ici de le metre final pour les faire visible!!!???
     public Fen_Liste(final String fichier, final ListeUtilisateurs liste) {
 
 //        this.fichier = fichier;
@@ -90,8 +89,8 @@ public class Fen_Liste extends JFrame {
         jpListeBoutons.add(btnSupprimer);
         jpListeBoutons.add(btnRefresh);
 
-        //parcourir la liste utilisateurs pour afficher 
-        ajouterListeAModel(liste);
+        //creer la liste model depuis la liste utilisateurs
+        ajouterListeAuModel(liste);
 
         //bouton ajouter
         btnAjouter.addActionListener(new ActionListener() {
@@ -106,11 +105,11 @@ public class Fen_Liste extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-//                setVisible(false);
                 if (list.getSelectedIndex() >= 0) {
                     int index = list.getSelectedIndex();
                     Utilisateur utilisateur = liste.get(index);
                     Fen_Principale fenPrincipal = new Fen_Principale(fichier, liste, utilisateur);
+                           
                 } else {
                     JOptionPane.showMessageDialog(null, " Selectionner l'utilisateur SVP", "Erreur!",
                             JOptionPane.ERROR_MESSAGE);
@@ -132,41 +131,43 @@ public class Fen_Liste extends JFrame {
             }
         });
 
+        //bouton Refresh
+        //faire enregistrer touts les modifications: dans la memoire et fichier, que dans le model
         btnRefresh.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 model.clear();
-                ajouterListeAModel(liste);
+                ajouterListeAuModel(liste);
                 ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
-
             }
         });
         //fin jpList
 
+        //panel Centre: add jpListe: 
         jpCentre = new JPanel();
         jpPanel.add(jpCentre, BorderLayout.CENTER);
         jpCentre.add(jpListe);
 
         //set fenetre
-        setTitle("Kumon: Liste utilisateurs");
+        setTitle("Liste utilisateurs");
         setContentPane(jpPanel);
         setSize(500, 350);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(true);
+        setResizable(false);
         setVisible(true);
-    }
+    }//constructeur Fen_Liste
 
     //objet methodes 
-    public void ajouterListeAModel(ListeUtilisateurs liste) {
+    public void ajouterListeAuModel(ListeUtilisateurs liste) {
 
         for (Utilisateur utilisateur : liste) {
             model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
         }
     }
 
-    public void ajouterUtilisateurAModel(Utilisateur utilisateur) {
+    public void ajouterUtilisateurAuModel(Utilisateur utilisateur) {
 
         model.addElement(utilisateur.getNom() + " " + utilisateur.getNiveau());
     }

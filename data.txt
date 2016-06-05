@@ -1,6 +1,5 @@
 Eva 152
-Dan 352
 Jora 4
 Bill 17
-Vasea 50
+Vasea 51
 IronMan 6
