@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * ver 1.0
  *
- * @author 1395945
+ * @author Dan-Ghenadie Roman
  */
 public class ListeUtilisateurs extends ArrayList<Utilisateur> {
 

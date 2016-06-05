@@ -18,8 +18,8 @@ import model.Utilisateur;
 import utils.ManipulationFichier;
 
 /**
- *
- * @author Irina Meghi-Roman
+ * ver 3.0
+ * @author Dan-Ghenadie Roman
  */
 public class Fen_Liste extends JFrame {
 
@@ -45,10 +45,10 @@ public class Fen_Liste extends JFrame {
 
     //constructeur
     //pourquoi il me demande ici de le metre final pour les faire visible!!!???
-    public Fen_Liste(final String fichier, final ListeUtilisateurs liste) {
+    public Fen_Liste(String fichierRecu, ListeUtilisateurs listeRecu) {
 
-//        this.fichier = fichier;
-//        this.liste = liste;
+        this.fichier = fichierRecu;
+        this.liste = listeRecu;
         //pourquoi ici marche directeument, sans le passer par attributs local????
         //lire le fichier (persistence) dans la liste (memoire)
         ManipulationFichier.lireFichierDansLaListe(fichier, liste);
@@ -109,7 +109,7 @@ public class Fen_Liste extends JFrame {
                     int index = list.getSelectedIndex();
                     Utilisateur utilisateur = liste.get(index);
                     Fen_Principale fenPrincipal = new Fen_Principale(fichier, liste, utilisateur);
-                           
+
                 } else {
                     JOptionPane.showMessageDialog(null, " Selectionner l'utilisateur SVP", "Erreur!",
                             JOptionPane.ERROR_MESSAGE);

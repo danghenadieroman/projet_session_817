@@ -13,8 +13,8 @@ import model.ListeUtilisateurs;
 import model.Utilisateur;
 
 /**
- *
- * @author 1395945
+ * ver 3.0
+ * @author Dan-Ghenadie Roman
  */
 public class Fen_Intro extends JFrame {
 
@@ -39,10 +39,6 @@ public class Fen_Intro extends JFrame {
 
         this.fichier = fichierRecu;
         this.liste = listeRecu;
-        
-       
-
-        
 
         lblImageLogo = new JLabel();
         lblImageLogo.setIcon(new ImageIcon(getClass().getResource("/images/logo.jpg")));

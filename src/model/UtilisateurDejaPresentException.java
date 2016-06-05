@@ -3,7 +3,7 @@ package model;
 /**
  * ver 1.0
  *
- * @author 1395945
+ * @author Dan-Ghenadie Roman
  */
 public class UtilisateurDejaPresentException extends Exception {
 

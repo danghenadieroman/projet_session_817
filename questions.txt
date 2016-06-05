@@ -1,2 +1,28 @@
 1. public Fen_Liste(final String fichier, final ListeUtilisateurs liste) 
     pourquoi final??? sinon erreur!
+
+2.  public Fen_Ajouter(final String fichier, final ListeUtilisateurs liste) 
+    porquoi final ??? sinon erreur!
+
+    j'ai trouve solution:
+        fichier = fichierRecu;
+        liste = listeRecu;
+
+        si
+        this.fenetre =  fenetre, alors erreur
+        sinon
+        fichier = fichierRecu;
+        pas d'erreur?????????? pourquoi!?
+
+2.1     public Fen_Principale(String fichier, ListeUtilisateurs liste, Utilisateur utilisateur)
+
+        this.fichier = fichier;
+        this.liste = liste;
+        this.utilisateur = utilisateur;
+
+pourquoi ici marche avec le meme nom ????????????
+
+
+
+3. comment fermer une fenetre et revenir la fenetre precedente? ex: fermer Fen_Ajouter et revenir a la Fen_Liste, pas variante setVisible(false)
+

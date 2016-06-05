@@ -15,8 +15,8 @@ import model.UtilisateurDejaPresentException;
 import utils.ManipulationFichier;
 
 /**
- *
- * @author 1395945
+ * ver 3.0
+ * @author Dan-Ghenadie Roman
  */
 public class Fen_Ajouter extends JFrame {
 
@@ -37,11 +37,14 @@ public class Fen_Ajouter extends JFrame {
     private JPanel jpNord;
     private JPanel jpSud;
 
-    //constructeur
-    public Fen_Ajouter(final String fichier, final ListeUtilisateurs liste) {
+    public Fen_Ajouter() {
+    }
 
-        this.fichier = fichier;
-        this.liste = liste;
+    //constructeur
+    public Fen_Ajouter(String fichierRecu, ListeUtilisateurs listeRecu) {
+
+        fichier = fichierRecu;
+        liste = listeRecu;
 
         lblTitre = new JLabel("Ajouter nouvel utilisateur:");
         lblNom = new JLabel("Nom: ");
@@ -97,7 +100,8 @@ public class Fen_Ajouter extends JFrame {
                         ManipulationFichier.ecrireListeDansLeFichier(fichier, liste);
 
                     } catch (Exception ex) {
-                        System.out.println("Ecriture fichier invalide");
+                        JOptionPane.showMessageDialog(null, "Ecriture fichier invalide", "Erreur!",
+                                JOptionPane.ERROR_MESSAGE);
                     }
 
                 }
@@ -113,14 +117,12 @@ public class Fen_Ajouter extends JFrame {
         });
 
         //condiguration fenetre
-        setTitle("Ajouter un nouveau utilisateur");
+        setTitle("Nouvel utilisateur");
         setContentPane(jpPanel);
         setSize(300, 150);
 //        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(true);
+        setResizable(false);
         setVisible(true);
-
     }
-
 }

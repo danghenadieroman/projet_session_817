@@ -1,16 +1,12 @@
 package control;
 
 import model.ListeUtilisateurs;
-import model.Utilisateur;
-import utils.ManipulationFichier;
 import vue.Fen_Intro;
-import vue.Fen_Liste;
-import vue.Fen_Principale;
 
 /**
- * ver 1.0
+ * ver 3.0
  *
- * @author 1395945
+ * @author Dan-Ghenadie Roman
  */
 public class AppCtr {
 
@@ -23,8 +19,6 @@ public class AppCtr {
         String fichier = "data.txt";
 
         Fen_Intro fen_intro = new Fen_Intro(fichier, liste);
-        
-        
 
     }
 

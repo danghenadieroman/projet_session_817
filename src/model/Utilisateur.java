@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * ver 1.0
  *
- * @author 1395945
+ * @author Dan-Ghenadie Roman
  */
 public class Utilisateur {
 

@@ -15,8 +15,8 @@ import model.Utilisateur;
 import utils.ManipulationFichier;
 
 /**
- *
- * @author Irina Meghi-Roman
+ * ver 3.0
+ * @author Dan-Ghenadie Roman
  */
 public class Fen_Principale extends JFrame implements ActionListener {
 
@@ -149,9 +149,9 @@ public class Fen_Principale extends JFrame implements ActionListener {
     //override methodes
     //ecouteurs pour les objets de la fenetre
     @Override
-    public void actionPerformed(ActionEvent ae) {
+    public void actionPerformed(ActionEvent e) {
 
-        switch (ae.getActionCommand()) {
+        switch (e.getActionCommand()) {
 
             case "0": {
                 btnResultat.setText(btnResultat.getText() + "0");
@@ -194,9 +194,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 break;
             }
             case "OK": {
-
                 verifierResultat();
-
                 break;
             }
             case "Annuler": {
@@ -235,7 +233,6 @@ public class Fen_Principale extends JFrame implements ActionListener {
                         JOptionPane.showMessageDialog(null, "Désolée. On recommance les exercices!", "Pas augmentation de niveau!",
                                 JOptionPane.PLAIN_MESSAGE);
                         metAJourFenetrePrincipale();
-//                        genererOpperation(utilisateur);
                     }
                 }
 
@@ -245,7 +242,6 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 nombreFauts++;
                 lblFautes.setText("Fauts: " + nombreFauts);
                 lblFautes.setForeground(Color.red);
-
             }
         }
     }
@@ -267,6 +263,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
 
     public void genererOpperation(Utilisateur utilisateur) {
         //generer les opperations
+        //algorithme temporaire pour faire la demonstration (Must Have)
         int max = determinerComplexiteOpperation(utilisateur);
         int min = 0;
         if (max > 20) {
