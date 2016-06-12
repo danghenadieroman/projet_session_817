@@ -16,6 +16,7 @@ import utils.ManipulationFichier;
 
 /**
  * ver 3.0
+ *
  * @author Dan-Ghenadie Roman
  */
 public class Fen_Principale extends JFrame implements ActionListener {
@@ -46,6 +47,8 @@ public class Fen_Principale extends JFrame implements ActionListener {
     private JButton btnResultat = new JButton();
 
     private JButton btnZero = new JButton("0");
+    private JButton btnMinus = new JButton("-");
+    private JButton btnVirgule = new JButton(",");
     private JButton btnOk = new JButton("OK");
     private JButton btnAnnuler = new JButton("Annuler");
 
@@ -95,11 +98,12 @@ public class Fen_Principale extends JFrame implements ActionListener {
         jpNord.add(jpOpperations);
 
         //generer les opperations
-        btnA = new JButton("" + genererNombre(MIN, MAX));
+        btnA = new JButton("" + genererChiffreA(utilisateur));
         btnA.setFont(new Font(null, Font.PLAIN, 36));
-        btnSign = new JButton("+");
+        //btnSign = new JButton("+");
+        genererSignOpperation(utilisateur);
         btnSign.setFont(new Font(null, Font.PLAIN, 36));
-        btnB = new JButton("" + genererNombre(MIN, MAX));
+        btnB = new JButton("" + genererChiffresB(utilisateur));
         btnB.setFont(new Font(null, Font.PLAIN, 36));
         btnEgal = new JButton("=");
         btnEgal.setFont(new Font(null, Font.PLAIN, 36));
@@ -115,6 +119,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
 
         //jpSud
         jpSud = new JPanel(new GridLayout(4, 3, 1, 1));
+
         jpPanel.add(jpSud);
 
         //générer une liste des entiers
@@ -126,14 +131,28 @@ public class Fen_Principale extends JFrame implements ActionListener {
             nombres[i].setFont(new Font(null, Font.BOLD, 20));
             jpSud.add(nombres[i]);
         }
+
         jpSud.add(btnZero);
         btnZero.setFont(new Font(null, Font.BOLD, 20));
         btnZero.addActionListener(this);
 
+        jpSud.add(new JButton(""));
+        jpSud.add(new JButton(""));
+
+        jpSud.add(btnMinus);
+        btnMinus.setFont(new Font(null, Font.BOLD, 20));
+        btnMinus.addActionListener(this);
+
+        jpSud.add(btnVirgule);
+        btnVirgule.setFont(new Font(null, Font.BOLD, 20));
+        btnVirgule.addActionListener(this);
+
         jpSud.add(btnOk);
+        btnOk.setFont(new Font(null, Font.BOLD, 20));
         btnOk.addActionListener(this);
 
         jpSud.add(btnAnnuler);
+        btnAnnuler.setFont(new Font(null, Font.BOLD, 20));
         btnAnnuler.addActionListener(this);
 
         //set fenetre
@@ -144,6 +163,9 @@ public class Fen_Principale extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setResizable(true);
         setVisible(true);
+        if (utilisateur.getNiveau() >= 30) {
+            setVisible(false);
+        }
     }//constructeur
 
     //override methodes
@@ -250,6 +272,55 @@ public class Fen_Principale extends JFrame implements ActionListener {
 
         return utilisateur.getNiveau();
         //ici il faut elaborer une algorithme de determination niveau opperation depandement de niveau utilisateur
+//        if (utilisateur.getNiveau() < 10){
+//            
+//        }
+
+    }
+
+    public int genererChiffresB(Utilisateur utilisateur) {
+
+        return genererNombre(1, 10);
+
+    }
+
+    public int genererChiffreA(Utilisateur utilisateur) {
+        int chiffre = 0;
+
+        if (utilisateur.getNiveau() < 10) {
+            chiffre = utilisateur.getNiveau();
+
+        } else if (utilisateur.getNiveau() < 20) {
+            chiffre = utilisateur.getNiveau() - 10;
+
+        } else if (utilisateur.getNiveau() < 30) {
+            chiffre = utilisateur.getNiveau() - 20;
+
+        } else if (utilisateur.getNiveau() < 40) {
+            chiffre = utilisateur.getNiveau() - 30;
+
+        } else {
+            chiffre = utilisateur.getNiveau();
+        }
+        return chiffre;
+    }
+
+    public void genererSignOpperation(Utilisateur utilisateur) {
+
+        //la methodes n'est pas fini
+        //c'est la variante must have
+        if (utilisateur.getNiveau() < 10) {
+            btnSign.setText("+");
+        } else if (utilisateur.getNiveau() < 20) {
+            btnSign.setText("*");
+        } else if (utilisateur.getNiveau() < 30) {
+            btnSign.setText("*");
+        } else if (utilisateur.getNiveau() < 40) {
+            btnSign.setText("*");
+        } else {
+            JOptionPane.showMessageDialog(null, "Vous avez deja fini le jeux!!!", "Felicitation!",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }
 
@@ -264,15 +335,14 @@ public class Fen_Principale extends JFrame implements ActionListener {
     public void genererOpperation(Utilisateur utilisateur) {
         //generer les opperations
         //algorithme temporaire pour faire la demonstration (Must Have)
-        int max = determinerComplexiteOpperation(utilisateur);
-        int min = 0;
-        if (max > 20) {
-            min = max - 20;
-        }
+        //ici on determiner le signe de l'opperation
 
-        btnA.setText("" + genererNombre(0, 9));
-        btnSign.setText("+");
-        btnB.setText("" + genererNombre(min, max));
+        int max = genererChiffresB(utilisateur);
+        //generer nombre opperation
+        btnA.setText("" + genererChiffreA(utilisateur));
+        //btnSign.setText("+");
+        genererSignOpperation(utilisateur);
+        btnB.setText("" + genererChiffresB(utilisateur));
         btnEgal.setText("=");
         btnResultat.setText("");
 
