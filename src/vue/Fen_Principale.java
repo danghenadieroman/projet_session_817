@@ -103,7 +103,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
         btnEgal.setFont(new Font(null, Font.PLAIN, 36));
         btnResultat = new JButton("");
         btnResultat.setFont(new Font(null, Font.PLAIN, 36));
-        
+
         genererOpperation(utilisateur);
 
         jpOpperations.add(btnA);
@@ -158,7 +158,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setResizable(true);
         setVisible(true);
-        if (utilisateur.getNiveau() >= 30) {
+        if (utilisateur.getNiveau() >= 40) {
             setVisible(false);
         }
     }//constructeur
@@ -210,6 +210,14 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 btnResultat.setText(btnResultat.getText() + "9");
                 break;
             }
+            case "-": {
+                btnResultat.setText(btnResultat.getText() + "-");
+                break;
+            }
+            case ",": {
+                btnResultat.setText(btnResultat.getText() + ",");
+                break;
+            }
             case "OK": {
                 verifierResultat();
                 break;
@@ -222,6 +230,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
                 setVisible(false);
                 break;
             }
+
         }//switch
     }
 
@@ -263,13 +272,13 @@ public class Fen_Principale extends JFrame implements ActionListener {
         }
     }
 
-    public void genererChiffreB(Utilisateur utilisateur) {
+    public void genererChiffreA(Utilisateur utilisateur) {
 
         //version must have
-        btnB.setText("" + genererNombre(1, 12));
+        btnA.setText("" + genererNombre(1, 12));
     }
 
-    public void genererChiffreA(Utilisateur utilisateur) {
+    public void genererChiffreB(Utilisateur utilisateur) {
 
         //version must have
         int chiffre = 0;
@@ -289,8 +298,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
         } else {
             chiffre = utilisateur.getNiveau();
         }
-        btnA.setText("" + chiffre);
-        //return chiffre;
+        btnB.setText("" + chiffre);
     }
 
     public void genererSignOpperation(Utilisateur utilisateur) {
@@ -300,7 +308,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
         if (utilisateur.getNiveau() < 10) {
             btnSign.setText("+");
         } else if (utilisateur.getNiveau() < 20) {
-            btnSign.setText("*");
+            btnSign.setText("-");
         } else if (utilisateur.getNiveau() < 30) {
             btnSign.setText("*");
         } else if (utilisateur.getNiveau() < 40) {
@@ -313,6 +321,10 @@ public class Fen_Principale extends JFrame implements ActionListener {
     }
 
     public void metAJourFenetrePrincipale() {
+        
+        //mise a jour de fenetre apres chaque X fois opperations
+        //X un constante
+        //variante must have
         lblNiveau.setText("Niveau: " + utilisateur.getNiveau());
         nombreOpp = 0;
         lblNombreOpp.setText("Opperation: " + nombreOpp);
@@ -322,7 +334,7 @@ public class Fen_Principale extends JFrame implements ActionListener {
 
     public void genererOpperation(Utilisateur utilisateur) {
 
-        //generer les opperations
+        //generer les opperations aléatoir
         genererChiffreA(utilisateur);
         genererSignOpperation(utilisateur);
         genererChiffreB(utilisateur);
@@ -330,16 +342,19 @@ public class Fen_Principale extends JFrame implements ActionListener {
         btnResultat.setText("");
     }
 
-    //modifier niveau utilisateur
+    
     public void augmanterNiveauUtilisateur(Utilisateur utilisateur) {
-
+        //modifier niveau utilisateur
         utilisateur.setNiveau(utilisateur.getNiveau() + 1);
     }
 
-    //verifier si resultat d'opperation est correct
+    
     public boolean verifierResultat(JButton btnR, JButton btnA, JButton btnB, JButton btnSign) {
-
-        int r = Integer.valueOf(btnR.getText());
+        //verifier si resultat d'opperation est correct
+        
+        //variante must have
+        //il faut regler la variante division
+        double r = Double.valueOf(btnR.getText());
         int a = Integer.valueOf(btnA.getText());
         int b = Integer.valueOf(btnB.getText());
         String sign = btnSign.getText();
@@ -369,9 +384,8 @@ public class Fen_Principale extends JFrame implements ActionListener {
         return resultat;
     }
 
-    //generer un nombre aléatoir entre min et max
     public int genererNombre(int minimum, int maximum) {
-
+        //generer un nombre aléatoir entre min et max   
         return minimum + (int) (Math.random() * maximum);
     }
 

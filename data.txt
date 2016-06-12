@@ -1,5 +1,5 @@
-Eva 13
-Dan 19
-David 29
-Victor 45
-Elsa 55
+Eva 5
+Dan 15
+David 25
+Victor 36
+Elsa 45
