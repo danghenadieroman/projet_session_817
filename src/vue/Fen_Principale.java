@@ -97,19 +97,14 @@ public class Fen_Principale extends JFrame implements ActionListener {
         jpOpperations = new JPanel(new GridLayout(1, 5, 2, 2));
         jpNord.add(jpOpperations);
 
-        //generer les opperations
-        btnA = new JButton("" + genererChiffreA(utilisateur));
         btnA.setFont(new Font(null, Font.PLAIN, 36));
-        //btnSign = new JButton("+");
-        genererSignOpperation(utilisateur);
         btnSign.setFont(new Font(null, Font.PLAIN, 36));
-        btnB = new JButton("" + genererChiffresB(utilisateur));
         btnB.setFont(new Font(null, Font.PLAIN, 36));
-        btnEgal = new JButton("=");
         btnEgal.setFont(new Font(null, Font.PLAIN, 36));
-
         btnResultat = new JButton("");
         btnResultat.setFont(new Font(null, Font.PLAIN, 36));
+        
+        genererOpperation(utilisateur);
 
         jpOpperations.add(btnA);
         jpOpperations.add(btnSign);
@@ -268,23 +263,15 @@ public class Fen_Principale extends JFrame implements ActionListener {
         }
     }
 
-    public int determinerComplexiteOpperation(Utilisateur utilisateur) {
+    public void genererChiffreB(Utilisateur utilisateur) {
 
-        return utilisateur.getNiveau();
-        //ici il faut elaborer une algorithme de determination niveau opperation depandement de niveau utilisateur
-//        if (utilisateur.getNiveau() < 10){
-//            
-//        }
-
+        //version must have
+        btnB.setText("" + genererNombre(1, 12));
     }
 
-    public int genererChiffresB(Utilisateur utilisateur) {
+    public void genererChiffreA(Utilisateur utilisateur) {
 
-        return genererNombre(1, 10);
-
-    }
-
-    public int genererChiffreA(Utilisateur utilisateur) {
+        //version must have
         int chiffre = 0;
 
         if (utilisateur.getNiveau() < 10) {
@@ -302,7 +289,8 @@ public class Fen_Principale extends JFrame implements ActionListener {
         } else {
             chiffre = utilisateur.getNiveau();
         }
-        return chiffre;
+        btnA.setText("" + chiffre);
+        //return chiffre;
     }
 
     public void genererSignOpperation(Utilisateur utilisateur) {
@@ -333,19 +321,13 @@ public class Fen_Principale extends JFrame implements ActionListener {
     }
 
     public void genererOpperation(Utilisateur utilisateur) {
-        //generer les opperations
-        //algorithme temporaire pour faire la demonstration (Must Have)
-        //ici on determiner le signe de l'opperation
 
-        int max = genererChiffresB(utilisateur);
-        //generer nombre opperation
-        btnA.setText("" + genererChiffreA(utilisateur));
-        //btnSign.setText("+");
+        //generer les opperations
+        genererChiffreA(utilisateur);
         genererSignOpperation(utilisateur);
-        btnB.setText("" + genererChiffresB(utilisateur));
+        genererChiffreB(utilisateur);
         btnEgal.setText("=");
         btnResultat.setText("");
-
     }
 
     //modifier niveau utilisateur
